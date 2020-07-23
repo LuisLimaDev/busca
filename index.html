@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	 <title>Pesquisa rapida</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="manifest" content="manifest.json">
+		<link rel="icon" type="image/x-icon" content="icone.png">
+		
+		<!--<script src="FileSaver.js"></script>
+		<script src="jquery.js"></script>
+		<script src="java.js" type="text/Javascript" async></script>
+		<script src="jquery.min.js"></script>-->
+		<script src="jquery.min.js"></script>
+		<script src="pre.js"></script>
+		
+		<style>
+		
+			body{ 
+				//min-width: 900px;
+				margin:0px;
+				padding: 0px;
+			}
+			
+			*{
+				transition: all 0.3s ease !important;
+				font-family: sans-serif;
+			}
+		
+			.pesquisa, .pesquisa select option{
+				background: var(--corTema);
+				padding: 5px;
+			}
+			
+			form, #inserir .bordaAredondada{
+				width: 100%;
+				display: grid;
+			}
+
+			#inserir .bordaAredondada{
+				grid-template-columns: 20% 25% 35% 20%;
+			}
+
+			form{
+				grid-template-columns: 30% 40% 30%;
+			}
+			
+			input, button, select, ::placeholder{
+			color: #fff;
+			}
+			
+			form .seletor, #inserir .seletor, input, button, select{
+				line-height: 40px;
+				background: rgba(0,0,0,0.0);
+				border: 1px solid rgba(0,0,0,0.05);
+				padding: 0px 10px;
+			}
+			
+			select{
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			-ms-appearance: none;
+			appearance: none;
+			background-color: rgba(0,0,0,0.0);
+			//background-image: url("https://image.ibb.co/iMeAJv/selectbox_arrow.png") no-repeat;  /* Imagem de fundo (Seta) */
+			background-position: right;  /*Posição da imagem do background*/
+			width: 93%; /* Tamanho do select, maior que o tamanho da div "div-select" */
+			height: 38px; /* altura do select, importante para que tenha a mesma altura em todo os navegadores */
+			border: none;
+			}
+			
+			input{ appearance: none }
+			
+			#bordaAredondada, .bordaAredondada{
+				border-radius: 5px;
+				background: rgba(0,0,0,0.4);
+				border: 1px solid rgba(0,0,0,0.0);
+				//height: 42px;
+				width: 100%;
+				//padding: 5px;
+			}
+			
+			#bordaAredondada:hover{box-shadow: 0 3px 15px #000;}
+			
+			#barraSuperior{
+				display: grid;
+				grid-template-columns: 50px calc(100% - 100px) 50px;
+			}
+			
+			#menuPrincipal{
+				width: 50%;
+				background-color: #ffffff;
+				min-width: 320px;
+			}
+			
+			#botoesMenu{
+				display: grid;
+				grid-template-columns: 30% 30% 50px;
+				justify-content: space-between;
+				line-height: 50px;
+			}
+			
+			a.botaoMenu{
+				text-align: center;
+				text-decoration: none;
+				color: #555;
+				font-size: 22pt;
+				font-weight: 600;
+				text-align: center;
+			}
+			
+			#topo{
+				overflow-y: scroll;
+				padding: 20px 30px;
+				display: grid;
+				max-height: 300px;
+			}
+
+			.topo a, #menuPrincipal a{
+				text-decoration: none;
+				border: 1px solid white;
+				color: #555;
+				font-size: 22pt;
+				width: 100%;
+				transition: 0.5s all ease;
+				display: block;
+			}
+
+			.radio a, #historico a{
+				text-decoration: none;
+				//background-color: rgba( 0,0,0,0.4);
+				color: #555555;
+				padding: 15px 5px;
+				line-height: 30px;
+				margin: 20px;
+				//box-shadow: 3px 3px 9px #555, -3px -3px 9px #888;
+				//border-radius: 10px;
+			}
+
+			
+			#menuPrincipal a:hover, .topo a:hover{ 
+				//color: white;
+			    background-image: radial-gradient(80% 90%, #ddd, transparent);
+				//box-shadow: 1px 1px 2px #555, -1px -1px 2px #888;
+				border-top-color: rgba(0, 0, 0, 0);
+				border-right-color: rgba(0, 0, 0, 0);
+				border-bottom-color: rgba(0, 0, 0, 0);
+				border-left-color: rgba(0, 0, 0, 0);
+			}
+			
+			.fixos{
+				//position: fixed;
+				//bottom: 0px;
+			}
+			
+			#objetivos{
+				//max-height: 390px;
+			}
+			
+			#objetivos, .fixos{
+			background: #efefef;
+			margin: 20px 0px;
+			//width: 100%;
+			padding: 1%;
+				font-family: sans;
+				//overflow-y: scroll;
+			}
+			
+			.teste{
+				width: 60%;
+				margin-left: auto;
+				margin-right: auto;
+				text-align: justify;
+			}
+
+			#teste div{
+				display: grid;
+				grid-template-columns: 40% 40%;
+				grid-template-rows: auto auto;
+				background: #fff;
+			}
+			
+			.teste .titulo{
+				font-size: 150%;
+				margin-top: 50px;
+			}
+			
+			.lorenIpsum{ display: none}
+			
+			#radio iframe{
+				border: 0px;
+				width: 100%;
+				height: 350px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			
+			#target{
+			width: max;
+			height: 400px;
+			background: #aaa;
+			}
+			
+			#w3sFrame{
+				display: none;
+				grid-template:columns: 45% 45%;
+				justify-content: space-around;
+			}
+			
+			.escondido{ display: none }
+			
+			#divHist:target, #divAdd:target, #menuPrincipal:target{
+				border: 1px solid #888;
+				box-shadow: 0px 3px 25px #ccc;
+			 animation: 0.5s aparecer;
+				border-radius: 5px;
+				display: block;
+				position: fixed;
+			}
+			
+			#divHist:target, #divAdd:target{
+				width: 94%;
+				height: 350px;
+				overflow-y: scroll;
+				background-color: #ffffff;
+				margin: 0% 3%;
+				top: 10px;
+			}
+			
+			#divHist #historico p:hover{
+				background-color: #a5f;
+			}
+
+			#historico, #inserir{ padding-top: 50px }
+
+			#divHist #historico p{
+				border: solid #aaa;
+				border-width: 1px 0px;
+				padding: 0px 20px;
+			}
+			
+			.gradeTres{
+				position: fixed;
+				background-color: var(--corTema);
+				width: 94%;
+				display: grid;
+				grid-template-columns: 200px 90px 50px;
+				justify-content: space-between;
+				border-top-left-radius: 3px;
+				border-top-right-radius: 3px;
+			}
+			
+			.gradeTres a, .gradeTres span{
+				font-size: 22pt;
+				text-align: center;
+				color: white;
+				text-decoration: none;
+				line-height: 45px;
+				border-radius: 3px 3px 0px 0px;
+			}
+			
+			div.gradeTres a.btFechar, #menuPrincipal .btFechar{
+			 background: red;
+			 border-radius: 0px 3px 0px 0px;
+			}
+			#menuPrincipal .btFechar{
+			 color: white;
+			 border: solid #888888;
+			 border-width: 1px 1px 0px 0px
+			}
+			
+			.formAdd{
+				display: grid;
+				background-color: var(--corTema);
+			}
+			
+			footer {
+			  font-size: 12px;
+			  color: #f00;
+			  text-align: center;
+			}
+
+			@page {
+			  size: A4;
+			  margin: 11mm 17mm 17mm 17mm;
+			}
+
+			@media print {
+				body{
+					margin: 70px 70px 70px 110px;
+				}
+				
+			  footer {
+				position: fixed;
+				bottom: 2mm;
+			  }
+
+			  .content-block, p {
+				page-break-inside: avoid;
+				  font-size: 12px;
+			  }
+
+			  html, body {
+				width: 210mm;
+				height: 297mm;
+			  }
+			}
+			
+			@keyframes aparecer{
+			 0%{ filter: opacity(0);}
+			 
+			 100%{ filter: opacity(1);}
+			}
+			
+			
+		
+		</style>
+		
+
+		
+		
+	</head>
+
+	<body>
+	
+		<div id="tudo" class="tudo">
+
+			<div id="divHist" class="escondido">
+				<div class="gradeTres">
+					<span>Historico</span>
+					<a href="JavaScript:limpaFechar()">Limpar</a>
+					<a href="#" id="btFecharHist" class="btFechar">&#10006;</a>
+				</div>
+				<div id="historico"></div>
+			</div>
+
+			<div id="divAdd" class="escondido" style="">
+				<div class="gradeTres">
+					<span>Adicionar</span>
+					<a href="JavaScript:limpaFavs()">Limpar</a>
+					<a href="#" class="btFechar" id="btFecharAdd">&#10006;</a>
+				</div>
+				<div id="inserir">
+					<div class="formAdd" style="display: grid">
+						<div class="seletor">
+							<select id="tipoDeLink">
+								<option>favorito</option>
+								<option>busca</option>
+							</select>
+						</div>
+						<input id="nomeSite" placeholder="Nome do site" />
+						<input id="linkSite" placeholder="http://endere.co" list="protoHTML"/>
+						<div class="seletor">
+							<select id="targetLink">
+								<option>frameRadio</option>
+								<option>_blank</option>
+							</select>
+						</div>
+						<button id="btAdcLink">Feito &#10004;</button>
+					</div>
+				</div>
+				<div id="resultadoDaAcao"></div>
+			</div>
+
+			<div class="pesquisa w3-container" id="barraTopo">
+				
+				<div id="barraSuperior">
+					<a href="#menuPrincipal" class="botaoMenu">&#9776;</a>
+					
+				
+					<form class="entradaPesquisa bordaAredondada" id="formulario" action="https://www.google.com.br/search?q=" target="frameRadio">
+						<div id="" class="w3-quarter seletor">
+							<select class="seletorDeSite fonteGrande" id="seleciona">
+								<!-- ADICIONAR ICONES COM CSS -->
+								<option value="">Inserir Url</option>
+								<option value="https://www.cifraclub.com.br/?q=" id="_blank">CifraClub</option>
+								<option value="http://www.tubidy.mobi/search.php?q=">Tubidy</option>
+								<option value="https://www.youtube.com/results?search_query=" id="_blank">Youtube</option>
+								<option value="https://www.letras.mus.br/?q=" id="_blank">Letras</option>
+								<option value="https://www.baixarseriesmp4.com/?s=">baixarseriesmp4</option>
+							</select>
+						</div>
+						<input type="text" name="q" id="entrada" class="entrada w3-half fonteGrande" placeholder="URL" list="protoHTML" value="http://">
+						<datalist id="protoHTML">
+						 <option value="http://">
+						</datalist>
+						
+						<button value="Ir" class="encontrar w3-quarter fonteGrande" id="btPesq">Pesquisar</button>
+					
+					</form>
+					<a href="about:blank" target="frameRadio" class="botaoMenu"> &#10006; </a>
+					
+				
+				</div>
+
+				<div id="menuPrincipal" class="link escondido">
+					<div id="botoesMenu">
+						<a href="#divAdd" class="botaoMenu">&#10010;</a>
+						<a href="#" class="botaoMenu">&#10000;</a>
+						<a href="#" class="botaoMenu btFechar">&#10006;</a>
+					</div>.
+					<a href="#divHist" id="updateHist">Historico</a>
+					<div id="topo" class="topo link">
+					</div>
+					
+					<div>Pesquisa rápida</div>	
+				</div>
+			
+			</div><!--pesquisa-->
+
+
+			<div id="radio">
+				<iframe id="frameRadio" name="frameRadio" src="about:blank" X-Frames-Options="sameorigin"></iframe>
+			</div>
+		<script type="text/Javascript" src="after.js"></script>
+			
+			
+		</div>
+	
+		<!--</div>tudo-->
+
+	
+	
+		
+	</body>
+</html>

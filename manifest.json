@@ -1,0 +1,15 @@
+{
+	"short_name": "Search",
+	"name": "Pesquisa rápida",
+	"description": "Marcador de favoritos e motores de busca."
+	"icons": [{
+		"src": "icon.png",
+		"type": "image/png",
+		"sizes": "128x128"
+	}],
+	"start_url": "index.html",
+	"background_color": "#aa55ff",
+	"display": "standalone",
+	"scope": "/",
+	"theme_color": "#aa55ff"
+}
