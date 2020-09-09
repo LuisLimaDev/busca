@@ -1,3 +1,4 @@
+require(['dependency'], function (dependency) {});
 const axios = require('axios');
 
 const sendGetRequest = async () => {
