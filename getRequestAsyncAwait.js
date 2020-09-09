@@ -1,4 +1,11 @@
+require.config({
+    paths: {
+        'dependency': 'http://some.domain.dom/path/to/dependency'
+    }
+});
+
 require(['dependency'], function (dependency) {});
+
 const axios = require('axios');
 
 const sendGetRequest = async () => {
