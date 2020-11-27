@@ -1,22 +1,24 @@
 //elemental.js
 
-let ancora, paragrafo, imagem, novoFrame;
+let ancora, paragrafo, spanDeTexto, imagem, novoFrame, novoBotao;
 
-let getById = ( idDoElemento => document.getElementById( idDoElemento ) );
-let getByClass = ( nomeDaClasse => document.getElementsByClassName( nomeDaClasse ) );
-let novoElm = ( nomeDoElemento => document.createElement( nomeDoElemento ) );
+let getById = (id) => document.getElementById(id);
+let getByClass = (cl) => document.getElementsByClassName(cl);
+let novoElm = (el) => document.createElement(el);
 
 class Elementos {
 
 	acrescentar( idDoElementoPai, elementoFilho ){
+		if( !(!(idDoElementoPai.toString().match("HTML"))) === true ){ idDoElementoPai.appendChild( elementoFilho ) } else {
 		getById( idDoElementoPai ).appendChild( elementoFilho );
+		}
 	}
 
 	novoLink( textoInterno, destinoDoLink, targetLink ){
 		ancora = novoElm("a");
 		ancora.innerHTML = textoInterno;
 		ancora.href = destinoDoLink;
-		if( targetLink == "" || targetLink == null ){ ancora.target = "_blank" } else { ancora.target = targetLink }
+		if( targetLink == "" || targetLink != null ) { ancora.target = targetLink }
 		return ancora;
 	}
 	
@@ -24,6 +26,12 @@ class Elementos {
 		paragrafo = novoElm("p");
 		paragrafo.innerHTML = linhaDoParagrafo;
 		return paragrafo;
+	}
+	
+	novoSpan( blocoDeTexto ){
+		spanDeTexto = novoElm("span");
+		spanDeTexto.innerHTML = blocoDeTexto;
+		return spanDeTexto;
 	}
 	
 	novaImagem( localDaimagem, descreverImagem ){
@@ -41,4 +49,13 @@ class Elementos {
 		if( nomeDoIframe == "youtube" ){ novoFrame.setAttribute("X-Frame-Options", "SAMEORIGIN") }
 		return novoFrame;
 	}
+
+    novoButton( textoDoBotao, funcaoDele ){
+        novoBotao = novoElm("button");
+        novoBotao.id = textoDoBotao;
+        novoBotao.innerText = textoDoBotao;
+        novoBotao.addEventListener("click", function(){ eval(funcaoDele) });
+        return novoBotao;
+    }
+
 }
