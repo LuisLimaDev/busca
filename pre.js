@@ -3,6 +3,7 @@
 	localStorage = window.localStorage;
 	
 	let root = document.documentElement;
+	let el = new Elementos;
 
 	root.addEventListener("mousemove", e => {
 		root.style.setProperty('--mouse-x', e.clientX + "px");
@@ -22,19 +23,6 @@
 **/
 	});
 
-	function getById(id){
-	return document.getElementById(id);
-	}
-
-	function getByClass(cl){
-	return document.getElementsByClassName(cl);
-	}
-
-	function criarNovoEl(el){
-	return document.createElement(el);
-	}
-	
-	
 	function updateHist(){
 
 		if( !( localStorage.getItem( "urlSite" ) ) == false ){
@@ -46,6 +34,70 @@
 		getById( "historico" ).innerHTML = localStorage.urlSite;
 	}
 	
+	function excluirItem( idDoitemParaExcluir ){}
+
+
+    function aplicarEdicao( idDoitemEditado ){
+        tipoDeLink = getById("tipoDeLink").value;
+        itensArmazenados = localStorage.getItem( tipoDeLink ).split(" ;; ");
+        itensArmazenados[ idDoitemEditado ] = getById("nomeSite").value + " & " + getById("linkSite").value + " & " + getById("targetLink").value;
+        
+        cntRegravar = 0;
+        todosOsItens = "";
+        while( cntRegravar < itensArmazenados.length ){
+            //todosOsItens = itensArmazenados[ cntRegravar ] + " ;; ";
+            if ( itensArmazenados[cntRegravar].split(" ;; ")[0] != ""){
+                todosOsItens = itensArmazenados[ cntRegravar ] + " ;; " + todosOsItens;
+                alert(todosOsItens);
+            };
+            cntRegravar++;
+        }
+        localStorage.setItem( tipoDeLink, todosOsItens );
+        btAplicarEdicao = "";
+        carregarAdicionados();
+    }
+	function editarItem( idDoitemParaEditar ){
+        item = localStorage.getItem( getById("selectGerenciador").value ).split(" ;; ")[ idDoitemParaEditar ];
+        getById("btAdcLink").style.display = "none";
+        getById("tipoDeLink").value = getById("selectGerenciador").value;
+        getById("nomeSite").value = item.split(" & ")[0];
+        getById("linkSite").value = item.split(" & ")[1];
+        getById("targetLink").value = item.split(" & ")[2];
+        btAplicarEdicao = el.novoButton("Aplicar","aplicarEdicao(" + idDoitemParaEditar + ")");
+        el.acrescentar( "novoBotao", btAplicarEdicao );
+    }
+
+	gerenciarItens = function(){
+		getById("gradeDeItens").innerHTML = "";
+		if( localStorage.getItem( getById("selectGerenciador").value ) == null ){
+			alert( "Não tem nenhum " + getById("selectGerenciador").value + " adicionado ainda!" );
+		} else {
+			linhasG = localStorage.getItem( getById("selectGerenciador").value ).split(" ;; ");
+			cntLinhasG = 0;
+			while( cntLinhasG <= linhasG.length ){
+				if(  linhasG[ cntLinhasG ] == "" || linhasG[ cntLinhasG ] == undefined){
+                    console.log("Nada na linha " + cntLinhasG )
+                    cntLinhasG++ 
+                } else if ( linhasG[ cntLinhasG ] != "" ){
+
+					linhaDeItem = el.novoParagrafo( el.novoSpan( linhasG[ cntLinhasG].split( " & " )[0] ).outerHTML );
+					linhaDeItem.id = cntLinhasG;
+                    console.log( cntLinhasG + " " + linhasG[cntLinhasG].split(" & ")[0] );
+
+					btEditar = el.novoLink( "&#10000;", "#divAdd");
+					btEditar.setAttribute("onclick", " editarItem(" + linhaDeItem.id + ")");
+					
+					btExcluir = el.novoLink( "&#10010;", "#divRemover");
+					btExcluir.setAttribute("onclick", "excluirItem(" + linhaDeItem.id + ")");
+
+					linhaDeItem.appendChild( btEditar );
+					linhaDeItem.appendChild( btExcluir );
+					getById("gradeDeItens").prepend( linhaDeItem );
+				}
+				cntLinhasG++;
+			}
+		}
+	};
 	
 	function verifEntradaTopo(){
 		//destiono = getById("seleciona").options[getById("seleciona").selectedIndex].value;
@@ -166,7 +218,7 @@
 		nada = 0; total = 255;
 		while (nada <= total){
 			codigoDaCor = "rgb(0,"+nada+",125)";
-			mostragem = criarNovoEl("div");
+			mostragem = novoElm("div");
 			mostragem.style.background = codigoDaCor ;
 			getById("radio").append(mostragem);
 			mostragem.innerText = codigoDaCor;
@@ -185,22 +237,14 @@
 			//getById("topo").innerHTML = localStorage.favorito;
 			
 			favsGuardados = localStorage.favorito;
-			separados = favsGuardados.split(" ;; ");
+			separados = favsGuardados.split(";;");
 			cntFavs = 0;
 			
 			while( cntFavs < separados.length ){
 				
 				if ( (separados[cntFavs] == "") != true ){
-					//console.log( "feito "+separados[cntFavs] );
 					
-					nomeDoFavorito = separados[cntFavs].split(" & ")[0];
-					urlSiteDoFavorito = separados[cntFavs].split(" & ")[1];
-					targetDoFavorito = separados[cntFavs].split(" & ")[2];
-					
-					urlSiteFav = criarNovoEl("a");
-					urlSiteFav.innerText = nomeDoFavorito;
-					urlSiteFav.href = urlSiteDoFavorito;
-					urlSiteFav.target = targetDoFavorito;
+					urlSiteFav = el.novoLink(separados[cntFavs].split(" & ")[0], separados[cntFavs].split(" & ")[1], separados[cntFavs].split(" & ")[2] );
 					urlSiteFav.id = "favorito" + cntFavs;
 					//urlSiteFav.setAttribute("onclick", "topoToHist(this)");
 					
@@ -214,26 +258,20 @@
 				cntFavs++;
 			}
 			
-		};
+		}
 		
 		if ( localStorage.getItem("busca") == null ){
 			console.log("busca vazio");
 		} else {
-			separados = localStorage.busca.split(" ;; ");
-			//alert(separados.length);
+			separados = localStorage.busca.split(";;");
+			alert(separados);
 			cntFavs = 0;
 			
 			while( cntFavs < separados.length ){
 				
 				if ( (separados[cntFavs] == "") != true ){
-					//console.log( "feito "+separados[cntFavs] );
 					
-					/*nomeDoFavorito = separados[cntFavs].split(" & ")[0];
-					urlSiteDoFavorito = separados[cntFavs].split(" & ")[1];
-					targetDoForm = separados[cntFavs].split(" & ")[2];
-					*/
-					
-					opicao = criarNovoEl("option");
+					opicao = novoElm("option");
 					opicao.innerText = separados[cntFavs].split(" & ")[0];
 					opicao.value = separados[cntFavs].split(" & ")[1];
 					opicao.id = separados[cntFavs].split(" & ")[2];
@@ -271,5 +309,3 @@
 			getById("formulario").setAttribute("action", origem.value.split("?")[0]);
 		}
 	}
-
-	
