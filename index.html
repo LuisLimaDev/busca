@@ -14,11 +14,7 @@
 		<script src="java.js" type="text/Javascript" async></script>
 		<script src="jquery.min.js"></script>-->
 		<script src="jquery.min.js"></script>
-		<script src="https://requirejs.org/docs/release/2.3.6/comments/require.js"></script>
-		<script src="https://requirejs.org/docs/release/2.3.6/r.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-		<script src="getRequestAsyncAwait.js"></script>
+		<script src="elemental.js"></script>
 		<script src="pre.js"></script>
 		
 		<style>
@@ -35,13 +31,14 @@
 			}
 		
 			.pesquisa, .pesquisa select option{
-				background: var(--corTema);
+				background: #a5f;
 				padding: 5px;
 			}
 			
-			form, #inserir .bordaAredondada{
+			form, #inserir .bordaAredondada, .entradaTexto{
 				width: 100%;
 				display: grid;
+				background-color: rgba(0,0,0,0.4);
 			}
 
 			#inserir .bordaAredondada{
@@ -56,11 +53,16 @@
 			color: #fff;
 			}
 			
-			form .seletor, #inserir .seletor, input, button, select{
+			form .seletor, #inserir .seletor, #divVerTodos .seletor, input, button, select{
 				line-height: 40px;
 				background: rgba(0,0,0,0.0);
-				border: 1px solid rgba(0,0,0,0.05);
+				border: solid rgba(0,0,0,0.3);
+				border-width: 0px 0px 1px 0px;
 				padding: 0px 10px;
+			}
+			
+			.pesquisa input:hover, #inserir input:hover{
+				border-width: 0 1px;
 			}
 			
 			select{
@@ -123,6 +125,8 @@
 				max-height: 300px;
 			}
 
+			
+		
 			.topo a, #menuPrincipal a{
 				text-decoration: none;
 				border: 1px solid white;
@@ -216,7 +220,7 @@
 			
 			.escondido{ display: none }
 			
-			#divHist:target, #divAdd:target, #menuPrincipal:target{
+			#divHist:target, #divAdd:target, #menuPrincipal:target, #divVerTodos:target{
 				border: 1px solid #888;
 				box-shadow: 0px 3px 25px #ccc;
 			 animation: 0.5s aparecer;
@@ -225,7 +229,7 @@
 				position: fixed;
 			}
 			
-			#divHist:target, #divAdd:target{
+			#divHist:target, #divAdd:target, #divVerTodos:target{
 				width: 94%;
 				height: 350px;
 				overflow-y: scroll;
@@ -234,13 +238,33 @@
 				top: 10px;
 			}
 			
-			#divHist #historico p:hover{
+			#divHist #historico p:hover, #divVerTodos div#gradeDeItens p:hover{
 				background-color: #a5f;
 			}
 
-			#historico, #inserir{ padding-top: 50px }
+			#historico, .entradaTexto{ margin-top: 60px; padding-top: 10px }
 
-			#divHist #historico p{
+			#divVerTodos div#gradeDeItens p{
+				display: grid;
+				grid-template-columns: 70% 15% 15%;
+				color: gray;
+			}
+
+			#divVerTodos div#gradeDeItens p a{
+				text-align: center;
+			}
+
+			#divVerTodos div#gradeDeItens p:hover a, #divVerTodos div#gradeDeItens p:hover span{
+				color: white;
+			}
+
+			#divVerTodos div#gradeDeItens p a, #divVerTodos div#gradeDeItens p span{
+				font-size: 15pt;
+				text-decoration: none;
+				color: gray;
+			}
+
+			#divHist #historico p, #divVerTodos div#gradeDeItens p span, #divVerTodos div#gradeDeItens p a{
 				border: solid #aaa;
 				border-width: 1px 0px;
 				padding: 0px 20px;
@@ -248,7 +272,7 @@
 			
 			.gradeTres{
 				position: fixed;
-				background-color: var(--corTema);
+				background-color: #999999;
 				width: 94%;
 				display: grid;
 				grid-template-columns: 200px 90px 50px;
@@ -274,11 +298,6 @@
 			 color: white;
 			 border: solid #888888;
 			 border-width: 1px 1px 0px 0px
-			}
-			
-			.formAdd{
-				display: grid;
-				background-color: var(--corTema);
 			}
 			
 			footer {
@@ -338,7 +357,26 @@
 					<a href="JavaScript:limpaFechar()">Limpar</a>
 					<a href="#" id="btFecharHist" class="btFechar">&#10006;</a>
 				</div>
-				<div id="historico"></div>
+				<div id="historico"><p>Abriu o link<br><a href="https://beeg.com/tag/creampie" target="_blank">https://beeg.com/tag/creampie</a></p><p>Pesquisou: 'php mysql server portable', em: <br> <a href="https://www.google.com.br/search?q=php%20mysql%20server%20portable" target="_blank">https://www.google.com.br/search?q=</a></p></div>
+			</div>
+
+			<div id="divVerTodos" class="escondido">
+				<div class="gradeTres">
+					<span>Gerenciar</span>
+					<a href="#divVerTodos">off</a>
+					<a href="#" id="btFecharVerTodos" class="btFechar">&#10006;</a>
+				</div>
+				<div id="selecionarItens" class="entradaTexto">
+					<h3>Quais itens deseja ver?</h3></3><br/>
+					<div class="seletor">
+						<select id="selectGerenciador">
+							<option>favorito</option>
+							<option>busca</option>
+						</select>
+					</div>
+					<button id="exibirItensGerenciador">Exibir</button>
+				</div>
+				<div id="gradeDeItens"></div>
 			</div>
 
 			<div id="divAdd" class="escondido" style="">
@@ -348,7 +386,7 @@
 					<a href="#" class="btFechar" id="btFecharAdd">&#10006;</a>
 				</div>
 				<div id="inserir">
-					<div class="formAdd" style="display: grid">
+					<div class="entradaTexto" style="display: grid">
 						<div class="seletor">
 							<select id="tipoDeLink">
 								<option>favorito</option>
@@ -363,7 +401,9 @@
 								<option>_blank</option>
 							</select>
 						</div>
-						<button id="btAdcLink">Feito &#10004;</button>
+                        <p id="novoBotao">
+				            <button id="btAdcLink">Feito &#10004;</button>
+                        </p>
 					</div>
 				</div>
 				<div id="resultadoDaAcao"></div>
@@ -385,6 +425,11 @@
 								<option value="https://www.youtube.com/results?search_query=" id="_blank">Youtube</option>
 								<option value="https://www.letras.mus.br/?q=" id="_blank">Letras</option>
 								<option value="https://www.baixarseriesmp4.com/?s=">baixarseriesmp4</option>
+								<option value="https://xhamster.com/search?q=">xHamster</option>
+								<option value="https://porn.com/search?sq=">Porn.com</option>
+								<option value="https://anysex.com/search/?q=">anysex</option>
+								<option value="https://www.sleazyneasy.com/search/?q=">SleazyNeasy</option>
+								<option value="https://jizzbunker.com/pt/search?query=">JizzBunker</option>
 							</select>
 						</div>
 						<input type="text" name="q" id="entrada" class="entrada w3-half fonteGrande" placeholder="URL" list="protoHTML" value="http://">
@@ -403,7 +448,7 @@
 				<div id="menuPrincipal" class="link escondido">
 					<div id="botoesMenu">
 						<a href="#divAdd" class="botaoMenu">&#10010;</a>
-						<a href="#" class="botaoMenu">&#10000;</a>
+						<a href="#divVerTodos" class="botaoMenu">&#10000;</a>
 						<a href="#" class="botaoMenu btFechar">&#10006;</a>
 					</div>.
 					<a href="#divHist" id="updateHist">Historico</a>
