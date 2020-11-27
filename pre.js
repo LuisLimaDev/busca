@@ -48,7 +48,7 @@
             //todosOsItens = itensArmazenados[ cntRegravar ] + " ;; ";
             if ( itensArmazenados[cntRegravar].split(" ;; ")[0] != ""){
                 todosOsItens = itensArmazenados[ cntRegravar ] + " ;; " + todosOsItens;
-                alert(todosOsItens);
+                //alert(todosOsItens);
             };
             cntRegravar++;
         }
@@ -237,7 +237,7 @@
 			//getById("topo").innerHTML = localStorage.favorito;
 			
 			favsGuardados = localStorage.favorito;
-			separados = favsGuardados.split(";;");
+			separados = favsGuardados.split(" ;; ");
 			cntFavs = 0;
 			
 			while( cntFavs < separados.length ){
