@@ -1,10 +1,8 @@
 // after.js
 
-	document.body.style.setProperty("--corTema", "rgba(100,30,200,0.5)");
-
 	getById("divHist").style.height = (window.innerHeight - 100) + "px";
 
-	document.body.style.minWidth = (screen.availWidth / 2 ) + "px";
+	document.body.style.minWidth = (screen.availWidth / 4 ) + "px";
 	document.body.style.height = (window.innerHeight) + "px";
 	document.getElementById("tudo").style.height = (window.innerHeight) + "px";
 
@@ -16,7 +14,7 @@
 	getById("btAdcLink").addEventListener("click", function(){ adicionar() });
 	getById("btFecharAdd").addEventListener("click", function(){ fechar() });
 	getById("btFecharHist").addEventListener("click", function(){ fechar() });
-	//getById("urlSiteSite").addEventListener("onfocus", function(){ select() })
+	getById("exibirItensGerenciador").addEventListener("click", function(){ gerenciarItens() })
 	getById("seleciona").addEventListener("change", function(){ seletorBarraSuperiorMuda() });
 	document.addEventListener("ready", function(){
 		alert("Oi!")
